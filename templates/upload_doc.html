@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-md-offset-2">
+            <form role="form" method="POST" action="{{ url_for('upload_doc')}}">
+
+                <h1>เพิ่มเอกสารใหม่ในเอกสาร ABCD</h1>
+
+                <fieldset>
+
+                    <div class="row">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <label for="">Document</label>
+                            <input type="text" class="form-control" name="doc" id="doc">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <label for="">Summary File</label>
+                            <input type="text" class="form-control" name="summary" id="summary">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <label for="">Attrach File(เอกสารแนบ)</label>
+                            <input type="text" class="form-control" name="attrach" id="attrach" multiple>
+                        </div>
+                    </div>
+
+
+
+                </fieldset>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="" id="">
+                                    ส่งอีเมลเพื่อแจ้งเตือน
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group" align="right">
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <button type="submit" class="btn btn-primary">
+                                อัพโหลด
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock content %}

@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-md-offset-2">
+            <form role="form" method="POST" action="/adddoc/{{doc_set_id}}">
+
+                {% for file in name %}
+                    <h1>เพิ่มเอกสารใหม่ในเอกสาร {{ file.name_doc }}</h1>
+                {% endfor %}
+
+                <hr style="border-top:3px solid #444444;">
+                <fieldset>
+
+                    <h4 for="">ชุดคำสั่ง</h4>
+                    <div class="parent">
+
+                        <div class="form-group col-md-3 col-sm-3 col-xs-3 col-lg-3" style="padding-left: 0px;">
+
+                            <input type="text" placeholder="เลขที่คำสั่ง" name="fname"
+                                class="form-control form-control-lg" maxlength="3">
+                        </div>
+                        <h1 style="margin-right: 10px;">/</h1>
+                        <div class="form-group">
+                            <input type="number" placeholder="ปี" name="lname" min="2551" max="2600"
+                                class="form-control form-control-lg"
+                                onKeyPress="if(this.value.length==4) return false;">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <h4 for="">Document</h4>
+                            <input type="text" class="form-control" name="doc" id="doc" required
+                                accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <h4 for="">Summary File</h4>
+                            <input type="text" class="form-control" name="summary" id="summary"
+                                accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <h4 for="">Attrach File(เอกสารแนบ)</h4>
+                            <input type="texe" class="form-control" name="attrach" id="attrach" multiple
+                                accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <div class="checkbox">
+                                <h4>
+                                    <input type="checkbox" value="" id="">
+                                    ยกเลิกใช้งานเอกสารล่าสุดหรือไม่
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <div class="checkbox">
+                                <h4>
+                                    <input type="checkbox" value="" id="">
+                                    ส่งอีเมลเพื่อแจ้งเตือน
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group" align="right">
+                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                            <button type="submit" class="btn btn-primary">
+                                อัพโหลด
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+
+{% endblock content %}

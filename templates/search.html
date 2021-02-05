@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+    <img src="{{ url_for('static', filename='/img/elib-logo-sticky.png') }}" class="center">
+</div>
+
+<div class="search-container" align="center" style="margin-top: 50px;">
+    <form action="/action_page.php">
+        <input type="text" placeholder="ต้องการค้นหาเอกสารใด.." name="search" style="width: 500px; font-size: 24px; border-radius: 15px;">
+        <button type="submit" style="border: transparent; background-color: transparent;"><i
+                class="fa fa-search"></i></button>
+    </form>
+</div>
+
+<div class="search-container" align="center" style="margin-top: 50px;">
+    <h3 class="center">หรือ</h3>
+</div>
+
+<div class="search-container" align="center" style="margin-top: 50px;">
+    <div class="dropdown" >
+        <button class="dropbtn" style="border-radius: 20px; font-size: 24px;">เลือกประเภท</button>
+        <div class="dropdown-content" id="style-2" style="overflow: auto; height: 200px;">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

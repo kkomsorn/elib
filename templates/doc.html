@@ -1,0 +1,151 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div>
+    <a href="/adddoc/{{ doc_set_id }}" class="btn" style="float: right; margin-left: 20px;">เพิ่มเอกสารใหม่</a>
+    <a href="/editdoc/{{ doc_set_id }}" class="btn" style="float: right;">แก้ไขเอกสาร</a>
+    {% for file in name %}
+        <h1>{{ file.name_doc }}</h1>
+    {% endfor %}
+
+    <h3>Recent Version</h3>
+
+</div>
+
+<hr style="border-top:3px solid #444444;">
+<div class="row">
+
+    {% for file in recent %}
+    <div class="col-md-12 middle_div-block ">
+        <div class="row">
+            <div class="col-md-1 col-sm-1">
+                <h3 class="middle_div-message">{{ file.id }}</h3>
+            </div>
+            <div class="col-md-4 col-sm-3">
+                <h3 class="middle_div-message">คำสั่งที่&emsp;{{ file.doc_order }}</h3>
+            </div>
+            <div class="col-md-2 col-sm-2">
+                <h3 class="middle_div-message" align="center">{{ file.post_by }}</h3>
+            </div>
+            <div class="col-md-2 col-sm-3">
+                <h3 class="middle_div-message" align="center">{{ file.date_create.strftime('%Y-%m-%d') }}</h3>
+            </div>
+            {% if file.status == true %}
+            <div class="col-md-2 col-sm-2">
+                <h3 class="middle_div-message" align="center" style="color:#5f9e5f;">ใช้งานอยู่</h3>
+            </div>
+            {% elif file.status == false %}
+            <div class="col-md-2 col-sm-2">
+                <h3 class="middle_div-message" align="center" style="color:red;">ยกเลิกใช้งาน</h3>
+            </div>
+            {% endif %}
+            <div class="col-md-1 col-sm-1">
+                <button class="btn"><i class="fa fa-download"></i></button>
+            </div>
+            
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+<h3 class="top_div-message" style="color: #444444;">เอกสารแนบ</h3>
+<hr style="border-top:3px solid #444444;">
+
+
+<div class="row">
+
+    {% for attrach in select_attrach %}
+    <div class="col-md-12 middle_div-block ">
+        <div class="row">
+            <div class="col-md-1 ">
+                <h3 class="middle_div-message">{{ attrach.id }}</h3>
+            </div>
+            <div class="col-md-4 ">
+                <h3 class="middle_div-message">{{ attrach.path_attrach }}</h3>
+            </div>
+            <div class="col-md-2 ">
+                <h3 class="middle_div-message" align="center">{{ attrach.post_by }}</h3>
+            </div>
+            <div class="col-md-4 ">
+                <h3 class="middle_div-message" >{{ attrach.date_create.strftime('%Y-%m-%d') }}</h3>
+            </div>
+            <div class="col-md-1 ">
+               <button class="btn"><i class="fa fa-download"></i></button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+<h3 class="top_div-message" style="color: #444444;">Summary</h3>
+<hr style="border-top:3px solid #444444;">
+
+<div class="row">
+
+    {% for summary in select_summary %}
+    <div class="col-md-12 middle_div-block ">
+        <div class="row">
+            <div class="col-md-1 ">
+                <h3 class="middle_div-message">{{ summary.id }}</h3>
+            </div>
+            <div class="col-md-4 ">
+                <h3 class="middle_div-message">{{ summary.path_summary }}</h3>
+            </div>
+            <div class="col-md-2 ">
+                <h3 class="middle_div-message" align="center">{{ summary.post_by }}</h3>
+            </div>
+            <div class="col-md-4 ">
+                <h3 class="middle_div-message" >{{ summary.date_create.strftime('%Y-%m-%d') }}</h3>
+            </div>
+
+            <div class="col-md-1 ">
+                <button class="btn" ><i class="fa fa-download"></i></button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+<h3 class="top_div-message" style="color: #444444;">History</h3>
+<hr style="border-top:3px solid #444444;">
+
+<div class="row">
+
+    {% for all in select_doc %}
+    <div class="col-md-12 middle_div-block ">
+        <div class="row">
+            <div class="col-md-1 ">
+                <h3 class="middle_div-message">{{ all.id }}</h3>
+            </div>
+            <div class="col-md-4 ">
+                <h3 class="middle_div-message">คำสั่งที่&emsp;{{ all.doc_order }}</h3>
+            </div>
+            <div class="col-md-2 ">
+                <h3 class="middle_div-message" align="center">{{ all.post_by }}</h3>
+            </div>
+            <div class="col-md-2 ">
+                <h3 class="middle_div-message" align="center">{{ all.date_create.strftime('%Y-%m-%d') }}</h3>
+            </div>
+            {% if all.status == true %}
+            <div class="col-md-2 ">
+                <h3 class="middle_div-message" align="center" style="color:#5f9e5f;">ใช้งานอยู่</h3>
+            </div>
+            {% elif all.status == false %}
+            <div class="col-md-2 ">
+                <h3 class="middle_div-message" align="center" style="color:red;">ยกเลิกใช้งาน</h3>
+            </div>
+            {% endif %}
+            <div class="col-md-1 ">
+                <button class="btn"><i class="fa fa-download"></i></button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock content %}
