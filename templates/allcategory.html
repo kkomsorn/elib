@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div>
+    <a href="/addcategory" class="btn-tar" style="float: right; margin-left: 20px;">เพิ่มประเภท</a>
+    <h1 >ประเภทเอกสารทั้งหมด</h1>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 top_div">
+        <div class="row">
+            <div class="col-md-5 "><h3 class="top_div-message">ชื่อประเภท</h3></div>
+            <div class="col-md-3 "><h3 class="top_div-message" align="center">upload เมื่อ</h3></div>
+            <div class="col-md-3 "><h3 class="top_div-message" align="center">จำนวนเอกสาร</h3></div>
+        </div>
+    </div>
+</div>
+
+        <div class="row">
+
+            {% for file in files %}
+                <div class="col-md-12 middle_div-block " >
+                    <div class="row">          
+                        <div class="col-md-5 "><h4 class="middle_div-message overtext">{{ file.cate_name }}</h4></div>
+                        <div class="col-md-3 "><h4 class="middle_div-message" align="center">{{ file.date_create }}</h4></div>
+                        <div class="col-md-3 "><h4 class="middle_div-message" align="center">{{ file.status }}</h4></div>
+
+                        <a id="{{ file.id }}"class="btn-tar" style="background-color: transparent;color: #444444;" href="{{ url_for('category', category_id=file.id) }}"><i class="fas fa-ellipsis-v"></i></a>
+
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+
+{% endblock content %}

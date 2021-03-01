@@ -9,13 +9,16 @@ class BaseModel(Model):
 
 class Tag(BaseModel):
     tag_name = CharField(max_length=255)
+    date_create = DateTimeField(default=datetime.datetime.now)
 
 class Category(BaseModel):
     cate_name = CharField(max_length=255)
+    date_create = DateTimeField(default=datetime.datetime.now)
 
 class Doc_Set(BaseModel):
     name_doc= CharField(max_length=255)
     date_create = DateTimeField(default=datetime.datetime.now)
+    category_id = CharField(max_length=255)
     post_by = CharField(max_length=255)
 
 class Doc(BaseModel):
@@ -38,6 +41,9 @@ class Summarys(BaseModel):
     name = CharField(max_length=255)
     path_summary = CharField(max_length=255)
 
+class pairing(BaseModel):
+    main_id_doc = ForeignKeyField(Doc_Set)
+    tags_id = ForeignKeyField(Tag)
 
 
 
@@ -46,4 +52,4 @@ if __name__ == '__main__':
     # mysql_db.execute_sql("SET FOREIGN_KEY_CHECKS=0")
     # mysql_db.drop_tables([Users])
     # mysql_db.execute_sql("SET FOREIGN_KEY_CHECKS=1")
-    mysql_db.create_tables([Summarys,Doc_Set,Doc,Tag,Category,Attrach])
+    mysql_db.create_tables([Summarys,Doc_Set,Doc,Tag,Category,Attrach,pairing])

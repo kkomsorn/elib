@@ -1,15 +1,25 @@
 
 {% extends "layout.html" %}
 {% block content %}
+<style>
+ .hj{
+     color: #444444;
+     transition: color 0.25s ease-in-out, transform 0.25s ease-in-out;
+ }
+ .hj:hover{
+    text-decoration: none;
+    color: white;
+    
+ }
 
+</style>
 <h1 >เอกสารทั้งหมด</h1>
 <div class="row">
     <div class="col-md-12 col-sm-12 top_div">
         <div class="row">
-            <div class="col-md-1 "><h3 class="top_div-message">No.</h3></div>
             <div class="col-md-5 "><h3 class="top_div-message">ชื่อเอกสาร</h3></div>
             <div class="col-md-2 "><h3 class="top_div-message" align="center">upload โดย</h3></div>
-            <div class="col-md-2 "><h3 class="top_div-message" align="center">upload เมื่อ</h3></div>
+            <div class="col-md-3 "><h3 class="top_div-message" align="center">upload เมื่อ</h3></div>
         </div>
     </div>
 </div>
@@ -19,12 +29,10 @@
             {% for file in files %}
                 <div class="col-md-12 middle_div-block " >
                     <div class="row">          
-                        <div class="col-md-1 "><h4 class="middle_div-message">{{ file.id }}</h4></div>
-                        <div class="col-md-5 "><h4 class="middle_div-message">{{ file.name_doc }}</h4></div>
-                        <div class="col-md-2 "><h4 class="middle_div-message" align="center">{{ file.post_by }}</h4></div>
-                        <div class="col-md-2 "><h4 class="middle_div-message" align="center">{{ file.date_create.strftime('%Y-%m-%d') }}</h4></div>
-                        <button class="btn" style="background-color: transparent;color: #444444;"><i class="fa fa-download"></i></button>
-                        <a id="{{ file.id }}"class="btn" style="background-color: transparent;color: #444444;" href="{{ url_for('doc', doc_set_id=file.id) }}"><i class="fas fa-ellipsis-v"></i></a>
+                        <div class="col-md-5 "><a id="{{ file.id }}" class="hj"href="{{ url_for('doc', doc_set_id=file.id) }}"><h4 class="middle_div-message overtext hj">{{ file.name_doc }}</h4></a></div>
+                        <div class="col-md-2 "><h4 class="middle_div-message overtext" align="center">{{ file.post_by }}</h4></div>
+                        <div class="col-md-3 "><h4 class="middle_div-message" align="center">{{ file.date_create }}</h4></div>
+                        <a id="{{ file.id }}"class="btn-tar hj" style="background-color: transparent;color: #444444;" href="{{ url_for('doc', doc_set_id=file.id) }}"><i class="fas fa-search hj"></i></a>
 
                     </div>
                 </div>

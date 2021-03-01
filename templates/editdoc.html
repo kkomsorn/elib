@@ -1,97 +1,186 @@
-{% extends "layout.html" %}
-{% block content %}
-<div class="container">
-    <div class="row">
+<!DOCTYPE html>
+<html>
 
-        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-md-offset-2">
-            <form role="form" method="POST" action="{{ url_for('upload')}}">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-                {% for file in name %}
+
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
+
+    <title>E-Lib - แก้ไขเอกสาร</title>
+</head>
+<style>
+    .btn {
+        padding: 12px 30px;
+        cursor: pointer;
+        font-size: 20px;
+        border-color: #ccc;
+        background-color: white;
+        margin-bottom: 5px;
+        min-width: 500px;
+    }
+
+    .dropdown-menu {
+        width: 500px;
+    }
+
+    .inner {
+        overflow-x: hidden;
+        max-height: 300px;
+    }
+</style>
+
+<body>
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+            <div class="container">
+                <a class="navbar-brand mr-4" href="/" style="font-size: 40px;">E-lib</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+                    aria-controls="navbarToggle" aria-expanded=False aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarToggle">
+                    <div class="navbar-nav mr-auto">
+                    </div>
+                    <!-- Navbar Right Side -->
+                    <div class="navbar-nav">
+
+                        <a class=" nav-link margin-nav" style="font-size: 24px;"
+                            href="{{ url_for('alldoc') }}">เอกสารทั้งหมด</a>
+                        <a class="nav-item nav-link margin-nav" style="font-size: 24px;"
+                            href="{{ url_for('allcate') }}">ประเภทเอกสาร</a>
+                        <a class="nav-item nav-link margin-nav" style="font-size: 24px;"
+                            href="{{ url_for('upload') }}">อัพโหลดเอกสารใหม่</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-md-offset-2">
+                <form role="form" method="POST" action="{{ url_for('edit')}}" enctype="multipart/form-data">
+
+                    {% for file in name %}
                     <h1>แก้ไขเอกสารใหม่ในเอกสาร {{ file.name_doc }}</h1>
-                {% endfor %}
-                <hr style="border-top:3px solid #444444;">
-                <fieldset>
-
-                    <div class="row">
-                        <div class="form-group col-md-4 col-sm-4 col-xs-4 col-lg-4">
-                            <h4 for="country">เลือกเลขที่คำสั่งที่จะแก้ไข</h4>
-                            <select class="form-control" name="select" id="cate">
-                                <option value="">-----เลือกเอกสาร-----</option>
-                                {% for doc in alldoc %}
-                                    <option value=>{{ doc.doc_order }}</option>
-                                {% endfor %}
-                            </select>
+                    {% endfor %}
+                    <input type="hidden" name="doc_set_id" value="{{ doc_set_id }}">
+                    <hr style="border-top:3px solid #444444;">
+                    <fieldset>
+                        
+                        <div class="row">
+                            <div class="form-group col-md-4 col-sm-4 col-xs-4 col-lg-4">
+                                <h4>เลือกเลขที่คำสั่งที่จะแก้ไข</h4>
+                                <select class="form-control" name="select_doc">
+                                    <option value="">-----เลือกเอกสาร-----</option>
+                                    {% for doc in alldoc %}
+                                    <option value="{{ doc.id }}">{{ doc.doc_order }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                            <h4 for="">Document</h4>
-                            <input type="file" class="form-control" name="doc" id="doc" required
-                                accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                        <div class="row">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                                <h4 for="">Document</h4>
+                                <input type="file" class="form-control" name="add_file" id="doc">
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                            <h4 for="">Summary File</h4>
-                            <input type="file" class="form-control" name="summary" id="summary"
-                                accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+    
+                        <div class="row">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                                <h4 for="">Summary File</h4>
+                                <input type="file" class="form-control" name="add_summary" id="summary" multiple>
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                            <h4 for="">Attrach File(เอกสารแนบ)</h4>
-                            <input type="file" class="form-control" name="attrach" id="attrach" multiple
-                                accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+    
+                        <div class="row">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                                <h4 for="">Attrach File(เอกสารแนบ)</h4>
+                                <input type="file" class="form-control" name="add_attrach" id="attrach" multiple>
+                            </div>
                         </div>
-                    </div>
 
+                        <div class="row">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-6 col-lg-6">
+                                <h4 for="">เลือกเอกสารที่จะให้ใช้งาน</h4>
+                                <select class="selectpicker simp" multiple data-live-search=True
+                                    name="selectActivate">
+                                    {% for doc in statusFalse %}
+                                    <option value="{{ doc.id }}">{{ doc.doc_order }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12 col-sm-12 col-xs-6 col-lg-6">
+                                <h4 for="">เลือกเอกสารที่จะยกเลิกใช้งาน</h4>
+                                <select class="selectpicker simp" multiple data-live-search=True
+                                    name="selectUnactivate">
+                                    {% for doc in statusTrue %}
+                                    <option value="{{ doc.id }}">{{ doc.doc_order }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
 
-                    <div class="row">
-                        <div class="form-group checkbox-group col-md-10 col-sm-10 col-xs-10 col-lg-10">
-                            <h4 class="descrip" style="height: 50px;padding-top: 10px;">
-                                ปรับสถานะเอกสารเป็นใช้งานอยู่
-                            </h4>
-                            <div style="background-color: #f0f0f0; height: 200px; overflow-y: auto;overflow-x: hidden; "
-                                id="style-2">
-                                <div class="row">
+                        <div class="row">
+
+                        </div>
+
+                    </fieldset>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                                <div class="checkbox">
+                                    <h4>
+                                        <input type="checkbox" />
+                                        <input type="hidden" name="email" value=False />
+                                        ส่งอีเมลเพื่อแจ้งเตือน
+                                    </h4>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </fieldset>
 
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                            <div class="checkbox">
-                                <h4>
-                                    <input type="checkbox" value="" id="">
-                                    ส่งอีเมลเพื่อแจ้งเตือน
-                                </h4>
+                    <div class="row" style="float: right;">
+                        <div class="form-group">
+                            <div class="col-md-2 col-sm-2 col-xs-2 col-lg-2">
+                                <button type="submit" class="btn-tar btn-primary">
+                                    แก้ไข
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="form-group" align="right">
-                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                            <button type="submit" class="btn btn-primary">
-                                อัพโหลด
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-</div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
 
-{% endblock content %}
+</body>
+<script>
+    $('input[type=checkbox]').on("change", function () {
+        var target = $(this).parent().find('input[type=hidden]').val();
+        if (target == False) {
+            target = True;
+        }
+        else {
+            target = False;
+        }
+        $(this).parent().find('input[type=hidden]').val(target);
+    });
+</script>
+
+</html>

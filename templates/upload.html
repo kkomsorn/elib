@@ -1,99 +1,195 @@
-{% extends "layout.html" %}
-{% block content %}
-<div class="container">
-    <div class="row">
+<!DOCTYPE html>
+<html>
 
-        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-md-offset-2">
-            <form role="form" method="POST" action="{{ url_for('upload')}}">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-                <h1>อัพโหลดเอกสารใหม่</h1>
-                <hr style="border-top:3px solid #444444;">
-                <fieldset>
-                    <div class="row">
-                        <div class="form-group col-md-12 col-sm-12 col-lg-12 col-xs-12">
-                            <h4 for="">ชื่อเอกสาร</h4>
-                            <input type="text" class="form-control" name="doc_name" id="doc_name" required>
-                        </div>
+
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
+
+    <title>E-Lib - แก้ไขเอกสาร</title>
+</head>
+<style>
+    .btn {
+        
+        cursor: pointer;
+        font-size: 20px;
+        height: 38px;
+        border-color: #ccc;
+        background-color: white;
+        margin-bottom: 5px;
+        min-width: 500px;
+    }
+
+    .dropdown-menu {
+        width: 500px;
+    }
+
+    .inner {
+        overflow-x: hidden;
+        max-height: 300px;
+    }
+</style>
+
+<body>
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+            <div class="container">
+                <a class="navbar-brand mr-4" href="/" style="font-size: 40px;">E-lib</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+                    aria-controls="navbarToggle" aria-expanded=False aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarToggle">
+                    <div class="navbar-nav mr-auto">
                     </div>
-                    <h4 for="">ชุดคำสั่ง</h4>
-                    <div class="parent">
+                    <!-- Navbar Right Side -->
+                    <div class="navbar-nav">
 
-                        <div class="form-group col-md-3 col-sm-3 col-xs-3 col-lg-3" style="padding-left: 0px;">
-                            <input type="text" placeholder="เลขที่คำสั่ง" name="fname"class="form-control form-control-lg" maxlength="3" required>
-                        </div>
-
-                        <h1 style="margin-right: 10px;">/</h1>
-                        
-                        <div class="form-group">
-                            <input type="number" placeholder="ปี" name="lname" min="2551" max="2600"
-                                class="form-control form-control-lg"
-                                onKeyPress="if(this.value.length==4) return false;" required>
-                        </div>
+                        <a class=" nav-link margin-nav" style="font-size: 24px;"
+                            href="{{ url_for('alldoc') }}">เอกสารทั้งหมด</a>
+                        <a class="nav-item nav-link margin-nav" style="font-size: 24px;"
+                            href="{{ url_for('allcate') }}">ประเภทเอกสาร</a>
+                        <a class="nav-item nav-link margin-nav" style="font-size: 24px;"
+                            href="{{ url_for('upload') }}">อัพโหลดเอกสารใหม่</a>
                     </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="row">
 
-                    <div class="row">
-                        <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                            <h4 for="">Document</h4>
-                            <input type="file" class="form-control" name="doc" id="doc" required>
+            <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-md-offset-2">
+                <form role="form" method="POST" action="{{ url_for('upload_doc') }}" enctype="multipart/form-data">
+
+                    <h1>อัพโหลดเอกสารใหม่</h1>
+                    <hr style="border-top:3px solid #444444;">
+                    <fieldset>
+                        <div class="row">
+                            <div class="form-group col-md-12 col-sm-12 col-lg-12 col-xs-12">
+                                <h4 for="">ชื่อเอกสาร</h4>
+                                <input type="text" class="form-control" name="doc_name" id="doc_name" required>
+                            </div>
                         </div>
-                    </div>
+                        <h4 for="">ชุดคำสั่ง</h4>
+                        <div class="parent">
 
-                    <div class="row">
-                        <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                            <h4 for="">Summary File</h4>
-                            <input type="file" class="form-control" name="summary" id="summary" multiple>
+                            <div class="form-group col-md-3 col-sm-3 col-xs-3 col-lg-3" style="padding-left: 0px;">
+                                <input type="text" placeholder="เลขที่คำสั่ง" name="fname"
+                                    class="form-control form-control-lg" maxlength="3" required>
+                            </div>
+
+                            <h1 style="margin-right: 10px;">/</h1>
+
+                            <div class="form-group">
+                                <input type="number" placeholder="ปี" name="lname" min="2551" max="2600"
+                                    class="form-control form-control-lg"
+                                    onKeyPress="if(this.value.length==4) return false;" required>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                            <h4 for="">Attrach File(เอกสารแนบ)</h4>
-                            <input type="file" class="form-control" name="attrach" id="attrach" multiple>
+                        <div class="row">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                                <h4 for="">Document</h4>
+                                <input type="file" class="form-control" name="file" id="doc" required>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="form-group col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                            <h4 for="country">ประเภท</h4>
-                            <select class="form-control" name="select" id="cate">
-                                <option value="">-----เลือกประเภท-----</option>
-                                <option value="1">ประเภท 1</option>
-                                <option value="2">ประเภท 2</option>
-                                <option value="3">ประเภท 3</option>
-                            </select>
+                        <div class="row">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                                <h4 for="">Summary File</h4>
+                                <input type="file" class="form-control" name="file_summary" id="summary" multiple>
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                                <h4 for="">Attrach File(เอกสารแนบ)</h4>
+                                <input type="file" class="form-control" name="file_attrach" id="attrach" multiple>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                                <h4 for="country">ประเภทของเอกสาร</h4>
+                                <select class="form-control" name="select" id="cate">
+                                    <option value="">-----เลือกประเภท-----</option>
+                                    {% for cate in allofcate %}
+                                    <option value="{{ cate.id }}">{{ cate.cate_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                                <h4 for="">เลือกหมวดหมู่เอกสาร</h4>
+                                <select class="selectpicker simp" multiple data-live-search=True
+                                    name="selectUnactivate">
+                                    {% for cate in allofcate %}
+                                    <option value="{{ cate.id }}">{{ cate.cate_name }}</option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+                        </div>
 
 
-                </fieldset>
+                    </fieldset>
 
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                            <div class="checkbox">
-                                <h4>
-                                    <input type="checkbox" value="" id="">
-                                    ส่งอีเมลเพื่อแจ้งเตือน
-                                </h4>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+                                <div class="checkbox">
+                                    <h4>
+                                        <input type="checkbox" />
+                                        <input type="hidden" name="email" value=False />
+                                        ส่งอีเมลเพื่อแจ้งเตือน
+                                    </h4>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="form-group" align="right">
-                        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                            <button type="submit" class="btn btn-primary">
-                                อัพโหลด
-                            </button>
+                    <div class="row" style="float: right;">
+                        <div class="form-group">
+                            <div class="col-md-2 col-sm-2 col-xs-2 col-lg-2">
+                                <button type="submit" class="btn-tar btn-primary">
+                                    อัพโหลด
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
 
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-</div>
-{% endblock content %}
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+
+</body>
+<script>
+    $('input[type=checkbox]').on("change", function () {
+        var target = $(this).parent().find('input[type=hidden]').val();
+        if (target == False) {
+            target = True;
+        }
+        else {
+            target = False;
+        }
+        $(this).parent().find('input[type=hidden]').val(target);
+    });
+</script>
+</html>

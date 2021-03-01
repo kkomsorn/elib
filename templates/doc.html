@@ -1,27 +1,78 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div>
-    <a href="/adddoc/{{ doc_set_id }}" class="btn" style="float: right; margin-left: 20px;">เพิ่มเอกสารใหม่</a>
-    <a href="/editdoc/{{ doc_set_id }}" class="btn" style="float: right;">แก้ไขเอกสาร</a>
+<style>
+    .tags {
+        border-radius: 5px;
+        border: 3px;
+        border-color: #d278fb;
+        background-color: #32446b;
+        padding: 5px;
+        margin-right: 5px;
+        margin-left: 5px;
+        margin-top: 5px;
+        font-size: 18px;
+        color: #c2c2c2;
+
+    }
+
+    .tags:hover {
+        text-decoration: none;
+        background-color: #4f6ba7;
+        color: white;
+
+    }
+
+    .btn-tar:hover {
+        color: #323232;
+        text-decoration: none;
+    }
+
+    .overflowdiv {
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: 160px;
+    }
+</style>
+
+<div style="margin-bottom: 20px;">
+    <a href="/adddoc/{{ doc_set_id }}" class="btn-tar" style="float: right; margin-left: 20px;">เพิ่มเอกสารใหม่</a>
+    <a href="/editdoc/{{ doc_set_id }}" class="btn-tar" style="float: right;">แก้ไขเอกสาร</a>
     {% for file in name %}
-        <h1>{{ file.name_doc }}</h1>
+    <h1 class="overtext" style="font-size: 40px;">{{ file.name_doc }}</h1>
     {% endfor %}
 
-    <h3>Recent Version</h3>
+    <div class="row" style="margin-top: 40px;">
+        <h4 style="display: inline; margin-bottom: 0px; padding-top: 5px;">Tags : </h4>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
+        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
+
+    </div>
 
 </div>
 
+<h3>Recent Version</h3>
 <hr style="border-top:3px solid #444444;">
 <div class="row">
 
     {% for file in recent %}
     <div class="col-md-12 middle_div-block ">
         <div class="row">
-            <div class="col-md-1 col-sm-1">
-                <h3 class="middle_div-message">{{ file.id }}</h3>
-            </div>
-            <div class="col-md-4 col-sm-3">
+            <div class="col-md-5 col-sm-3">
                 <h3 class="middle_div-message">คำสั่งที่&emsp;{{ file.doc_order }}</h3>
             </div>
             <div class="col-md-2 col-sm-2">
@@ -40,9 +91,9 @@
             </div>
             {% endif %}
             <div class="col-md-1 col-sm-1">
-                <button class="btn"><i class="fa fa-download"></i></button>
+                <button class="btn-tar" style="background-color: transparent;"><a href="/static/{{ file.path_main }}" download style="color: #444444;"><i class="fa fa-download"></i></a></i></button>
             </div>
-            
+
         </div>
     </div>
     {% endfor %}
@@ -53,63 +104,59 @@
 <hr style="border-top:3px solid #444444;">
 
 
-<div class="row">
-
-    {% for attrach in select_attrach %}
-    <div class="col-md-12 middle_div-block ">
-        <div class="row">
-            <div class="col-md-1 ">
-                <h3 class="middle_div-message">{{ attrach.id }}</h3>
-            </div>
-            <div class="col-md-4 ">
-                <h3 class="middle_div-message">{{ attrach.path_attrach }}</h3>
-            </div>
-            <div class="col-md-2 ">
-                <h3 class="middle_div-message" align="center">{{ attrach.post_by }}</h3>
-            </div>
-            <div class="col-md-4 ">
-                <h3 class="middle_div-message" >{{ attrach.date_create.strftime('%Y-%m-%d') }}</h3>
-            </div>
-            <div class="col-md-1 ">
-               <button class="btn"><i class="fa fa-download"></i></button>
+<div class="container overflowdiv">
+    <div class="row">
+        {% for attrach in select_attrach %}
+        <div class="col-md-12 middle_div-block ">
+            <div class="row">
+                <div class="col-md-5 ">
+                    <h3 class="middle_div-message overtext">{{ attrach.name }}</h3>
+                </div>
+                <div class="col-md-2 ">
+                    <h3 class="middle_div-message" align="center">{{ attrach.post_by }}</h3>
+                </div>
+                <div class="col-md-4 ">
+                    <h3 class="middle_div-message">{{ attrach.date_create.strftime('%Y-%m-%d') }}</h3>
+                </div>
+                <div class="col-md-1 ">
+                    <button class="btn-tar" style="background-color: transparent;"><a href="/static/{{ attrach.path_main }}" download style="color: #444444;"><i class="fa fa-download"></i></a></i></button>
+                </div>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
+
+</div>
 
 
 <h3 class="top_div-message" style="color: #444444;">Summary</h3>
 <hr style="border-top:3px solid #444444;">
 
-<div class="row">
+<div class="container overflowdiv">
+    <div class="row">
+        {% for summary in select_summary %}
+        <div class="col-md-12 middle_div-block ">
+            <div class="row">
+                <div class="col-md-5 ">
+                    <h3 class="middle_div-message overtext">{{ summary.name }}</h3>
+                </div>
+                <div class="col-md-2 ">
+                    <h3 class="middle_div-message" align="center">{{ summary.post_by }}</h3>
+                </div>
+                <div class="col-md-4 ">
+                    <h3 class="middle_div-message">{{ summary.date_create.strftime('%Y-%m-%d') }}</h3>
+                </div>
 
-    {% for summary in select_summary %}
-    <div class="col-md-12 middle_div-block ">
-        <div class="row">
-            <div class="col-md-1 ">
-                <h3 class="middle_div-message">{{ summary.id }}</h3>
-            </div>
-            <div class="col-md-4 ">
-                <h3 class="middle_div-message">{{ summary.path_summary }}</h3>
-            </div>
-            <div class="col-md-2 ">
-                <h3 class="middle_div-message" align="center">{{ summary.post_by }}</h3>
-            </div>
-            <div class="col-md-4 ">
-                <h3 class="middle_div-message" >{{ summary.date_create.strftime('%Y-%m-%d') }}</h3>
-            </div>
-
-            <div class="col-md-1 ">
-                <button class="btn" ><i class="fa fa-download"></i></button>
+                <div class="col-md-1 ">
+                    <button class="btn-tar" style="background-color: transparent;"><a href="/static/{{ summary.path_main }}" download style="color: #444444;"><i class="fa fa-download"></i></a></i></button>
+                </div>
             </div>
         </div>
+        {% endfor %}
+
     </div>
-    {% endfor %}
-
 </div>
-
 <h3 class="top_div-message" style="color: #444444;">History</h3>
 <hr style="border-top:3px solid #444444;">
 
@@ -118,10 +165,7 @@
     {% for all in select_doc %}
     <div class="col-md-12 middle_div-block ">
         <div class="row">
-            <div class="col-md-1 ">
-                <h3 class="middle_div-message">{{ all.id }}</h3>
-            </div>
-            <div class="col-md-4 ">
+            <div class="col-md-5 ">
                 <h3 class="middle_div-message">คำสั่งที่&emsp;{{ all.doc_order }}</h3>
             </div>
             <div class="col-md-2 ">
@@ -140,7 +184,8 @@
             </div>
             {% endif %}
             <div class="col-md-1 ">
-                <button class="btn"><i class="fa fa-download"></i></button>
+                <button class="btn-tar" style="background-color: transparent;"><a href="/static/{{ all.path_main }}" download style="color: #444444;"><i class="fa fa-download"></i></a></i></button>
+
             </div>
         </div>
     </div>

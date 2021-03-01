@@ -11,7 +11,11 @@ body {
 h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
-
+.overtext {
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
 
 .form {
   width: 400px;
@@ -318,7 +322,7 @@ a, li, p, h1, h2, h3, small, div {
   background-color: #233669;
 }
 
-.btn {
+.btn-tar{
   background-color: #32446b;
   border: none;
   color: white;
@@ -326,6 +330,7 @@ a, li, p, h1, h2, h3, small, div {
   cursor: pointer;
   font-size: 20px;
   margin-top: 2px;
+  border-radius: 20px;
 }
 
 #style-2::-webkit-scrollbar-track {
@@ -346,16 +351,19 @@ a, li, p, h1, h2, h3, small, div {
 }
 
 @media only screen and (max-width: 1193px) {
-  a, li, p, h1, h2, h3, small, div {
-    font-size: 16px;
+  li, p, h1, h2, h3, small, div ,h4,a{
+    font-size: 20px;
   }
-  .btn {
-    font-size: 50%;
+  .btn-tar {
     padding: 10px 20px;
   }
   .top_div {
     height: 45px;
   }
+  a.nav-item{
+    font-size: 20px;
+  }
+  
 }
 .parent{
   display:flex;
