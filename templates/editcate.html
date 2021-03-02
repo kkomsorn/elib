@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
 
-    <title>E-Lib - แก้ไขเอกสาร</title>
+    <title>E-Lib - แก้ไขประเภท</title>
 </head>
 <style>
     .btn {
@@ -67,83 +67,39 @@
         <div class="row">
 
             <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-md-offset-2">
-                <form role="form" method="POST" action="{{ url_for('edit')}}" enctype="multipart/form-data">
+                <form role="form" method="POST" action="{{ url_for('editc')}}" enctype="multipart/form-data">
 
                     {% for file in name %}
                     <h1>แก้ไขเอกสารใหม่ในเอกสาร {{ file.name_doc }}</h1>
                     {% endfor %}
-                    <input type="hidden" name="doc_set_id" value="{{ doc_set_id }}">
+                    <input type="hidden" name="category_id" value="{{ category_id }}">
                     <hr style="border-top:3px solid #444444;">
                     <fieldset>
                         
+                    
                         <div class="row">
-                            <div class="form-group col-md-4 col-sm-4 col-xs-4 col-lg-4">
-                                <h4>เลือกเลขที่คำสั่งที่จะแก้ไข</h4>
-                                <select class="form-control" name="select_doc">
-                                    <option value="">-----เลือกเอกสาร-----</option>
-                                    {% for doc in alldoc %}
-                                    <option value="{{ doc.id }}">{{ doc.doc_order }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-12 col-sm-12 col-xs-6 col-lg-6">
-                                <h4 for="">เลือกเพิ่มหมวดหมู่</h4>
-                                <select class="selectpicker simp" multiple data-live-search=True
-                                    name="selecttagActivate">
-                                    {% for doc in have_doc_tag %}
-                                    <option value="{{ doc.id }}">{{ doc.pairing.tags_id.tag_name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group col-md-12 col-sm-12 col-xs-6 col-lg-6">
-                                <h4 for="">เลือกลบหมวดหมู่</h4>
-                                <select class="selectpicker simp" multiple data-live-search=True
-                                    name="selecttagUnactivate">
-                                    {% for doc in statusTrue %}
-                                    <option value="{{ doc.id }}">{{ doc.doc_order }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                                <h4 for="">Document</h4>
-                                <input type="file" class="form-control" name="add_file" id="doc">
-                            </div>
-                        </div>
-    
-                        <div class="row">
-                            <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                                <h4 for="">Summary File</h4>
-                                <input type="file" class="form-control" name="add_summary" id="summary" multiple>
-                            </div>
-                        </div>
-    
-                        <div class="row">
-                            <div class="form-group col-md-12 col-sm-12 col-xs-12 col-lg-12">
-                                <h4 for="">Attrach File(เอกสารแนบ)</h4>
-                                <input type="file" class="form-control" name="add_attrach" id="attrach" multiple>
+                            <div class="form-group col-md-5 col-sm-5 col-xs-5 col-lg-5">
+                                <h4 for="">แก้ไขชื่อประเภท</h4>
+                                <input type="text" class="form-control" name="name_cate" id="doc" >
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="form-group col-md-12 col-sm-12 col-xs-6 col-lg-6">
-                                <h4 for="">เลือกเอกสารที่จะให้ใช้งาน</h4>
+                                <h4 for="">เลือกเอกสารที่จะเพิ่มเข้าหมวด</h4>
                                 <select class="selectpicker simp" multiple data-live-search=True
                                     name="selectActivate">
-                                    {% for doc in statusFalse %}
-                                    <option value="{{ doc.id }}">{{ doc.doc_order }}</option>
+                                    {% for doc in adddoctocate %}
+                                    <option value="{{ doc.id }}">{{ doc.name_doc }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
                             <div class="form-group col-md-12 col-sm-12 col-xs-6 col-lg-6">
-                                <h4 for="">เลือกเอกสารที่จะยกเลิกใช้งาน</h4>
+                                <h4 for="">เลือกเอกสารที่จะลบจากหมวด</h4>
                                 <select class="selectpicker simp" multiple data-live-search=True
                                     name="selectUnactivate">
-                                    {% for doc in statusTrue %}
-                                    <option value="{{ doc.id }}">{{ doc.doc_order }}</option>
+                                    {% for doc in deletedocfromcate %}
+                                    <option value="{{ doc.id }}">{{ doc.name_doc }}</option>
                                     {% endfor %}
                                 </select>
                             </div>

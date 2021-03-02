@@ -50,13 +50,15 @@ def doc(doc_set_id):
         Doc.date_create.desc()).limit(1)
 
     select_summary = Summarys.select().where(Summarys.main_id_doc_id ==
-                                     doc_set_id).order_by(Summarys.date_create.desc())
+                                             doc_set_id).order_by(Summarys.date_create.desc())
     select_attrach = Attrach.select().where(Attrach.main_id_doc_id ==
-                                    doc_set_id).order_by(Attrach.date_create.desc())
+                                            doc_set_id).order_by(Attrach.date_create.desc())
     select_doc = Doc.select().where(Doc.main_id_doc_id ==
-                            doc_set_id).order_by(Doc.date_create.desc())
+                                    doc_set_id).order_by(Doc.date_create.desc())
 
-    return render_template('doc.html', name=name, recent=recent, select_doc=select_doc, doc_set_id=doc_set_id, select_summary=select_summary, select_attrach=select_attrach)
+    doc_tags = Doc_Set.select(Doc_Set.name_doc, pairing.tags_id, pairing.main_id_doc).join(pairing).where(pairing.main_id_doc == doc_set_id)
+
+    return render_template('doc.html', name=name, recent=recent, doc_tags=doc_tags, select_doc=select_doc, doc_set_id=doc_set_id, select_summary=select_summary, select_attrach=select_attrach)
 
 ##############################################################################################################################################################################################
 
@@ -64,69 +66,75 @@ def doc(doc_set_id):
 @app.route("/upload", methods=['GET', 'POST'])
 def upload():
     allofcate = Category.select().order_by(Category.date_create.desc())
-    return render_template('upload.html', allofcate=allofcate, title="อัพโหลดเอกสาร")
+    alloftag = Tag.select().order_by(Tag.id)
+    return render_template('upload.html', allofcate=allofcate, alloftag=alloftag, title="อัพโหลดเอกสาร")
 
 
 @app.route("/upload_doc", methods=['GET', 'POST'])
 def upload_doc():
-        doc_name = request.form['doc_name']
-        order = request.form['fname']+"/"+request.form['lname']
-        select = request.form['select']
+    doc_name = request.form['doc_name']
+    order = request.form['fname']+"/"+request.form['lname']
+    select = request.form['select']
 
-        Doc_Set.create(name_doc=doc_name, category_id=select)
-        QueryDocID = Doc_Set.select().order_by(Doc_Set.id.desc()).limit(1)
-        Id_doc = "";
-        for row in QueryDocID:
-            Id_doc = row.id;
+    Doc_Set.create(name_doc=doc_name, category_id=select)
+    QueryDocID = Doc_Set.select().order_by(Doc_Set.id.desc()).limit(1)
+    Id_doc = ""
+    for row in QueryDocID:
+        Id_doc = row.id
 
-        target = os.path.join(APP_ROOT, 'static'+os.sep+'upload'+os.sep+'doc')
-        if not os.path.isdir(target):
-            os.mkdir(target)
-        for file in request.files.getlist("file"):
-            if file.filename != '':
-                print(file)
-                filename = file.filename
-                dbsave = os.path.join('upload'+os.sep+'doc'+os.sep+filename)
-                destination = os.sep.join([target, filename])
-                print(destination)
-                file.save(destination)
-                Doc.create(path_main=dbsave,
-                           main_id_doc_id=Id_doc, status=True, doc_order=order)
+    target = os.path.join(APP_ROOT, 'static'+os.sep+'upload'+os.sep+'doc')
+    if not os.path.isdir(target):
+        os.mkdir(target)
+    for file in request.files.getlist("file"):
+        if file.filename != '':
+            print(file)
+            filename = file.filename
+            dbsave = os.path.join('upload'+os.sep+'doc'+os.sep+filename)
+            destination = os.sep.join([target, filename])
+            print(destination)
+            file.save(destination)
+            Doc.create(path_main=dbsave,
+                       main_id_doc_id=Id_doc, status=True, doc_order=order)
 
-        target2 = os.path.join(
-            APP_ROOT, 'static'+os.sep+'upload'+os.sep+'summary')
-        if not os.path.isdir(target2):
-            os.mkdir(target2)
-        for file_summary in request.files.getlist("file_summary"):
-            if file_summary.filename != '':
-                print(file_summary)
-                filename_summary = file_summary.filename
-                dbsave = os.path.join('upload'+os.sep+'summary'+os.sep+filename_summary)
-                destination2 = os.sep.join([target2, filename_summary])
-                print(destination2)
-                file_summary.save(destination2)
-                Attrach.create(path_attrach=dbsave,
-                               main_id_doc_id=Id_doc, name=filename_summary)
+    target2 = os.path.join(
+        APP_ROOT, 'static'+os.sep+'upload'+os.sep+'summary')
+    if not os.path.isdir(target2):
+        os.mkdir(target2)
+    for file_summary in request.files.getlist("file_summary"):
+        if file_summary.filename != '':
+            print(file_summary)
+            filename_summary = file_summary.filename
+            dbsave = os.path.join(
+                'upload'+os.sep+'summary'+os.sep+filename_summary)
+            destination2 = os.sep.join([target2, filename_summary])
+            print(destination2)
+            file_summary.save(destination2)
+            Attrach.create(path_attrach=dbsave,
+                           main_id_doc_id=Id_doc, name=filename_summary)
 
-        target3 = os.path.join(
-            APP_ROOT, 'static'+os.sep+'upload'+os.sep+'attrach')
-        if not os.path.isdir(target3):
-            os.mkdir(target3)
+    target3 = os.path.join(
+        APP_ROOT, 'static'+os.sep+'upload'+os.sep+'attrach')
+    if not os.path.isdir(target3):
+        os.mkdir(target3)
 
-        for file_attrach in request.files.getlist("file_attrach"):
-            if file_attrach.filename != '':
-                print(file_attrach)
-                filename_attrach = file_attrach.filename
-                dbsave = os.path.join('upload'+os.sep+'attrach'+os.sep+filename_attrach)
-                destination3 = os.sep.join([target3, filename_attrach])
-                print(destination3)
-                file_attrach.save(destination3)
-                Summarys.create(path_summary=dbsave,
-                                main_id_doc_id=Id_doc, name=filename_attrach)
+    for file_attrach in request.files.getlist("file_attrach"):
+        if file_attrach.filename != '':
+            print(file_attrach)
+            filename_attrach = file_attrach.filename
+            dbsave = os.path.join(
+                'upload'+os.sep+'attrach'+os.sep+filename_attrach)
+            destination3 = os.sep.join([target3, filename_attrach])
+            print(destination3)
+            file_attrach.save(destination3)
+            Summarys.create(path_summary=dbsave,
+                            main_id_doc_id=Id_doc, name=filename_attrach)
 
-        flash('เพิ่มเอกสารใหม่เรียบร้อย', 'success')
+    print(request.form.getlist("selecttag"))
+    for select_tag in request.form.getlist("selecttag"):
+        pairing.create(main_id_doc_id=Id_doc, tags_id=select_tag)
+    flash('เพิ่มเอกสารใหม่เรียบร้อย', 'success')
 
-        return redirect(url_for('alldoc'))
+    return redirect(url_for('alldoc'))
 
 
 ##############################################################################################################################################################################################
@@ -138,58 +146,63 @@ def adddoc_id(doc_set_id):
 
 @app.route("/add_doc", methods=['GET', 'POST'])
 def add_doc():
-        order = request.form['fname']+"/"+request.form['lname']
-        doc_set_id = request.form["doc_set_id"]
+    order = request.form['fname']+"/"+request.form['lname']
+    doc_set_id = request.form["doc_set_id"]
 
-        email = request.values['email']
-        print(email)
-        print(doc_set_id)
+    email = request.values['email']
+    print(email)
+    print(doc_set_id)
 
-        target = os.path.join(APP_ROOT, 'static'+os.sep+'upload'+os.sep+'doc')
-        if not os.path.isdir(target):
-            os.mkdir(target)
-        for file in request.files.getlist("add_file"):
-            if file.filename != '':
-                print(file)
-                filename = file.filename
-                dbsave = os.path.join('upload'+os.sep+'doc'+os.sep+filename)
-                destination = os.sep.join([target, filename])
-                print(destination)
-                file.save(destination)
-                Doc.create(path_main=dbsave,main_id_doc_id=doc_set_id, status=True, doc_order=order)
+    target = os.path.join(APP_ROOT, 'static'+os.sep+'upload'+os.sep+'doc')
+    if not os.path.isdir(target):
+        os.mkdir(target)
+    for file in request.files.getlist("add_file"):
+        if file.filename != '':
+            print(file)
+            filename = file.filename
+            dbsave = os.path.join('upload'+os.sep+'doc'+os.sep+filename)
+            destination = os.sep.join([target, filename])
+            print(destination)
+            file.save(destination)
+            Doc.create(path_main=dbsave, main_id_doc_id=doc_set_id,
+                       status=True, doc_order=order)
 
-        target2 = os.path.join(
-            APP_ROOT, 'static'+os.sep+'upload'+os.sep+'summary')
-        if not os.path.isdir(target2):
-            os.mkdir(target2)
-        for file_summary in request.files.getlist("add_summary"):
-            if file_summary.filename != '':
-                print(file_summary)
-                filename_summary = file_summary.filename
-                dbsave = os.path.join('upload'+os.sep+'summary'+os.sep+filename_summary)
-                destination2 = os.sep.join([target2, filename_summary])
-                print(destination2)
-                file_summary.save(destination2)
-                Summarys.create(path_summary=dbsave,main_id_doc_id=doc_set_id, name=filename_summary)
+    target2 = os.path.join(
+        APP_ROOT, 'static'+os.sep+'upload'+os.sep+'summary')
+    if not os.path.isdir(target2):
+        os.mkdir(target2)
+    for file_summary in request.files.getlist("add_summary"):
+        if file_summary.filename != '':
+            print(file_summary)
+            filename_summary = file_summary.filename
+            dbsave = os.path.join(
+                'upload'+os.sep+'summary'+os.sep+filename_summary)
+            destination2 = os.sep.join([target2, filename_summary])
+            print(destination2)
+            file_summary.save(destination2)
+            Summarys.create(path_summary=dbsave,
+                            main_id_doc_id=doc_set_id, name=filename_summary)
 
-        target3 = os.path.join(
-            APP_ROOT, 'static'+os.sep+'upload'+os.sep+'attrach')
-        if not os.path.isdir(target3):
-            os.mkdir(target3)
+    target3 = os.path.join(
+        APP_ROOT, 'static'+os.sep+'upload'+os.sep+'attrach')
+    if not os.path.isdir(target3):
+        os.mkdir(target3)
 
-        for file_attrach in request.files.getlist("add_attrach"):
-            if file_attrach.filename != '':
-                print(file_attrach)
-                filename_attrach = file_attrach.filename
-                dbsave = os.path.join('upload'+os.sep+'attrach'+os.sep+filename_attrach)
-                destination3 = os.sep.join([target3, filename_attrach])
-                print(destination3)
-                file_attrach.save(destination3)
-                Attrach.create(path_attrach=dbsave,main_id_doc_id=doc_set_id, name=filename_attrach)
+    for file_attrach in request.files.getlist("add_attrach"):
+        if file_attrach.filename != '':
+            print(file_attrach)
+            filename_attrach = file_attrach.filename
+            dbsave = os.path.join(
+                'upload'+os.sep+'attrach'+os.sep+filename_attrach)
+            destination3 = os.sep.join([target3, filename_attrach])
+            print(destination3)
+            file_attrach.save(destination3)
+            Attrach.create(path_attrach=dbsave,
+                           main_id_doc_id=doc_set_id, name=filename_attrach)
 
-        flash('เพิ่มเอกสารใหม่เรียบร้อย', 'success')
+    flash('เพิ่มเอกสารใหม่เรียบร้อย', 'success')
 
-        return redirect('doc/'+doc_set_id)
+    return redirect('doc/'+doc_set_id)
 
 ##############################################################################################################################################################################################
 
@@ -204,13 +217,22 @@ def allcate():
 @app.route("/addcategory", methods=['GET', 'POST'])
 def addcategory():
     multiselect = Doc_Set.select().where(Doc_Set.category_id == "")
-    return render_template('addcate.html', title="เพิ่มประเภทเอกสาร",multiselect = multiselect)
+    return render_template('addcate.html', title="เพิ่มประเภทเอกสาร", multiselect=multiselect)
 
 
 @app.route("/addcate", methods=['GET', 'POST'])
 def addcate():
     cate_name = request.form['name_cate']
     Category.create(cate_name=cate_name)
+    QueryDocID = Category.select().order_by(Category.id.desc()).limit(1)
+    Id_doc = ""
+    for row in QueryDocID:
+        Id_doc = row.id
+
+    for select_doc in request.form.getlist("selectdoc"):
+        updatesdoc = Doc_Set.update(category_id=Id_doc).where(Doc_Set.id == select_doc)
+        updatesdoc.execute()
+
     return redirect(url_for('allcate'))
 ##############################################################################################################################################################################################
 
@@ -219,24 +241,28 @@ def addcate():
 def category(category_id):
     files = Doc_Set.select().where(Doc_Set.category_id == category_id)
     name = Category.select().where(Category.id == category_id)
-    return render_template('category.html', files=files, name=name, title="เพิ่มประเภทเอกสาร")
+    return render_template('category.html', files=files, name=name, category_id = category_id,title="เพิ่มประเภทเอกสาร")
 
 
 ##############################################################################################################################################################################################
 
 @app.route("/editdoc/<string:doc_set_id>", methods=['GET', 'POST'])
 def editdoc(doc_set_id):
-    
+
     name = Doc_Set.select().where(Doc_Set.id == doc_set_id)
     select_doc = Doc.select().where(Doc.main_id_doc_id == doc_set_id)
     status_doc = Doc.select().where(Doc.main_id_doc_id == doc_set_id, Doc.status == True)
     status_doc_false = Doc.select().where(Doc.main_id_doc_id == doc_set_id, Doc.status == False)
-    return render_template('editdoc.html', doc_set_id=doc_set_id, title="แก้ไขเอกสาร", name=name, alldoc=select_doc, statusTrue=status_doc, statusFalse=status_doc_false)
+
+    have_doc_tags = Doc_Set.select(Doc_Set.name_doc, pairing.tags_id, pairing.main_id_doc).join(pairing).where(pairing.main_id_doc == doc_set_id)
 
 
-@app.route("/edit",methods=['GET', 'POST'])
+    return render_template('editdoc.html', doc_set_id=doc_set_id,have_doc_tag=have_doc_tags, title="แก้ไขเอกสาร", name=name, alldoc=select_doc, statusTrue=status_doc, statusFalse=status_doc_false)
+
+
+@app.route("/edit", methods=['GET', 'POST'])
 def edit():
-    doc_set_id = request.form["doc_set_id"]
+    doc_set_id = request.form['doc_set_id']
     edit_doc_set_id = request.form["select_doc"]
     target = os.path.join(APP_ROOT, 'static'+os.sep+'upload'+os.sep+'doc')
     if not os.path.isdir(target):
@@ -249,9 +275,9 @@ def edit():
             destination = os.sep.join([target, filename])
             print(destination)
             file.save(destination)
-            update = Doc.update(path_main=dbsave).where(Doc.id==edit_doc_set_id)
+            update = Doc.update(path_main=dbsave).where(
+                Doc.id == edit_doc_set_id)
             update.execute()
-
 
     target2 = os.path.join(APP_ROOT, 'static'+os.sep+'upload'+os.sep+'summary')
     if not os.path.isdir(target2):
@@ -260,14 +286,16 @@ def edit():
         if file_summary.filename != '':
             print(file_summary)
             filename_summary = file_summary.filename
-            dbsave = os.path.join('upload'+os.sep+'summary'+os.sep+filename_summary)
+            dbsave = os.path.join(
+                'upload'+os.sep+'summary'+os.sep+filename_summary)
             destination2 = os.sep.join([target2, filename_summary])
             print(destination2)
             file_summary.save(destination2)
-            Summarys.create(path_summary=dbsave,main_id_doc_id=doc_set_id, name=filename_summary)
+            Summarys.create(path_summary=dbsave,
+                            main_id_doc_id=doc_set_id, name=filename_summary)
 
     target3 = os.path.join(
-    APP_ROOT, 'static'+os.sep+'upload'+os.sep+'attrach')
+        APP_ROOT, 'static'+os.sep+'upload'+os.sep+'attrach')
     if not os.path.isdir(target3):
         os.mkdir(target3)
 
@@ -275,22 +303,49 @@ def edit():
         if file_attrach.filename != '':
             print(file_attrach)
             filename_attrach = file_attrach.filename
-            dbsave = os.path.join('upload'+os.sep+'attrach'+os.sep+filename_attrach)
+            dbsave = os.path.join(
+                'upload'+os.sep+'attrach'+os.sep+filename_attrach)
             destination3 = os.sep.join([target3, filename_attrach])
             print(destination3)
             file_attrach.save(destination3)
-            Attrach.create(path_attrach=dbsave,main_id_doc_id=doc_set_id, name=filename_attrach)
-            flash('แก้ไขเอกสารแนบเรียบร้อย', 'success')
-    
+            Attrach.create(path_attrach=dbsave,
+                           main_id_doc_id=doc_set_id, name=filename_attrach)
+
     for status in request.form.getlist("selectUnactivate"):
-        updatestatus = Doc.update(status=False).where(Doc.id==status)
+        updatestatus = Doc.update(status=False).where(Doc.id == status)
         updatestatus.execute()
     for status in request.form.getlist("selectActivate"):
-        updatestatus = Doc.update(status=True).where(Doc.id==status)
+        updatestatus = Doc.update(status=True).where(Doc.id == status)
         updatestatus.execute()
 
     flash('แก้ไขเอกสารเรียบร้อย', 'success')
     return redirect('doc/'+doc_set_id)
+##############################################################################################################################################################################################
+##############################################################################################################################################################################################
+
+@app.route("/editcate/<string:category_id>", methods=['GET', 'POST'])
+def editcate(category_id):
+
+    adddoctocate = Doc_Set.select().where(Doc_Set.category_id == "")
+    deletedocfromcate = Doc_Set.select().where(Doc_Set.category_id == category_id)
+
+
+    return render_template('editcate.html',category_id=category_id,adddoctocate=adddoctocate,deletedocfromcate=deletedocfromcate)
+
+
+@app.route("/editc", methods=['GET', 'POST'])
+def editc():
+
+    category_id =request.form["category_id"]
+    for status in request.form.getlist("selectActivate"):
+        updatestatus = Doc_Set.update(category_id=category_id).where(Doc_Set.id == status)
+        updatestatus.execute()
+    for status in request.form.getlist("selectUnactivate"):
+        updatestatus = Doc_Set.update(category_id = "").where(Doc_Set.id == status)
+        updatestatus.execute()
+
+    flash('แก้ไขเอกสารเรียบร้อย', 'success')
+    return redirect('doc/')
 ##############################################################################################################################################################################################
 
 

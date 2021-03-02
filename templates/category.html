@@ -2,6 +2,7 @@
 {% block content %}
 
 <div>
+    <a href="/editcate/{{ category_id }}" class="btn-tar" style="float: right;">แก้ไขประเภท</a>
     {% for file in name %}
         <h1 class="overtext" style="min-height: 55px;">หมวดหมู่เอกสาร {{ file.cate_name }}</h1>
     {% endfor %}

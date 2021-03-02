@@ -78,7 +78,7 @@
                         <div class="row">
                             <div class="form-group col-md-5 col-sm-5 col-xs-5 col-lg-5">
                                 <h4 for="">ชื่อประเภท</h4>
-                                <input type="text" class="form-control" name="name_cate" id="doc" required
+                                <input type="text" class="form-control" name="name_cate" id="doc" required 
                                     accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
                             </div>
                         </div>
@@ -86,7 +86,7 @@
                             <div class="form-group col-md-6 col-sm-6 col-xs-6 col-lg-6">
                                 <h4 for="">เลือกเอกสารที่จะอยู่ใหมวด</h4>
                                 <select class="selectpicker simp" multiple data-live-search=True
-                                    name="selectActivate">
+                                    name="selectdoc">
                                     {% for doc in multiselect %}
                                     <option value="{{ doc.id }}">{{ doc.name_doc }}</option>
                                     {% endfor %}

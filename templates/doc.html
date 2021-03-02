@@ -44,22 +44,9 @@
 
     <div class="row" style="margin-top: 40px;">
         <h4 style="display: inline; margin-bottom: 0px; padding-top: 5px;">Tags : </h4>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายบัญชี</a>
-        <a href="#" style="display: inline;" class="tags">ฝ่ายพัสดุ</a>
+        {% for tag in doc_tags %}
+            <a href="#" style="display: inline;" class="tags">{{ tag.pairing.tags_id.tag_name }}</a>
+        {% endfor %}
 
     </div>
 

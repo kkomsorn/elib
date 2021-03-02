@@ -131,9 +131,9 @@
                             <div class="form-group col-md-6 col-sm-6 col-xs-6 col-lg-6">
                                 <h4 for="">เลือกหมวดหมู่เอกสาร</h4>
                                 <select class="selectpicker simp" multiple data-live-search=True
-                                    name="selectUnactivate">
-                                    {% for cate in allofcate %}
-                                    <option value="{{ cate.id }}">{{ cate.cate_name }}</option>
+                                    name="selecttag">
+                                    {% for tag in alloftag %}
+                                    <option value="{{ tag.id }}">{{ tag.tag_name }}</option>
                                     {% endfor %}
 
                                 </select>

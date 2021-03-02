@@ -12,7 +12,7 @@ class Tag(BaseModel):
     date_create = DateTimeField(default=datetime.datetime.now)
 
 class Category(BaseModel):
-    cate_name = CharField(max_length=255)
+    cate_name = CharField(unique=True)
     date_create = DateTimeField(default=datetime.datetime.now)
 
 class Doc_Set(BaseModel):
